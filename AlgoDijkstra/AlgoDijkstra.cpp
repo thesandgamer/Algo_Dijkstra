@@ -8,7 +8,9 @@ using std::vector;
 
 int main()
 {
-    std::cout << "Hello World!\n";
+   vector<Node> 
+
+
 }
 
 
@@ -27,3 +29,11 @@ struct Node
     int cost;
 
 };
+
+class PathfindingList
+{
+    vector<Node> nodeList;
+
+    Node* FindSmallestValue();
+};
+
