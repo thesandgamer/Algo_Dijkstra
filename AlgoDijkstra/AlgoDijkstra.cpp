@@ -8,8 +8,6 @@ using std::vector;
 
 int main()
 {
-   vector<Node> 
-
 
 }
 
