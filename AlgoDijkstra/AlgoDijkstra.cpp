@@ -8,6 +8,34 @@ using std::vector;
 
 int main()
 {
+    PathfindingList openList;
+    PathfindingList closedList;
+
+    Node startNode = Node();
+    startNode.node = 'A';
+    startNode.connectedNodes;
+    startNode.cost = 0;
+
+    Node goalNode = Node();
+
+
+    openList = PathfindingList();
+    openList.nodeList.push_back( startNode);
+
+    while (openList.nodeList.size() > 0)
+    {
+        Node current = *openList.FindSmallestValue();
+
+        if (current.node == goalNode.node) break;
+        
+        
+        for (Node* connection : current.connectedNodes)
+        {
+            
+
+        }
+
+    }
 
 }
 
@@ -23,15 +51,22 @@ int main()
 struct Node
 {
     char node;
-    vector<Node> connectedNodes;
+    vector<Node*> connectedNodes;
     int cost;
 
 };
 
 class PathfindingList
 {
+public:
     vector<Node> nodeList;
 
     Node* FindSmallestValue();
+    bool Contains();
+    Node* Find();
+
+
+    //Créer un override pour = et == qui va retourner la nodeList
+    //Créer un override pour += et pour -=
 };
 
