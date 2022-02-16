@@ -23,7 +23,6 @@ Node* PathFindingList::FindSmallestValue()
 
 bool PathFindingList::Contains(Node node)
 {
-	
 	std::vector<Node>::iterator it = std::find(nodeList.begin(), nodeList.end(), node);
 	if (it != nodeList.end())
 	{

@@ -20,6 +20,7 @@ public:
 
     bool operator == (PathFindingList const& obj)
     {
+        /*
         if (this->nodeList == obj.nodeList)
         {
             return true;
@@ -29,8 +30,15 @@ public:
         {
             return false;
         }
-
+       */
     }
+
+    PathFindingList& operator= (const PathFindingList& ref)
+    {
+        nodeList = ref.nodeList;
+        return *this;
+    };
+
 
     /*
     PathFindingList operator+=(PathFindingList const& obj)

@@ -10,9 +10,11 @@ struct Node
     vector<Connection> connectedNodes;
     int cost;
 
+    Node() {};
 
     bool operator == (Node const& obj)
     {
+        
         if (this->node == obj.node)
         {
             return true;
@@ -24,11 +26,20 @@ struct Node
         }
         
     }
+ 
 
-    /*
-    Node operator =(Node const& obj)
+    Node& operator= (const Node& ref)
     {
-        return 
-    }*/
+        node = ref.node;
+        connectedNodes = ref.connectedNodes;
+        cost = ref.node;
+        return *this;
+    };
+
+    Node(const Node& ref)
+    {
+        *this = ref;
+    };
+
 
 };
