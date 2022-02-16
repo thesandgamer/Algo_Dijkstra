@@ -136,9 +136,13 @@ vector<float> FindPath()
 
         //Créer le path
         vector<Connection> path;
+
+        //Si à la fin le node current n'est pas le goal c'est qu'on ne l'a pas trouvé
         if (current.node != goalNode.node)
         {
         }
+
+        //Calcul du chemin final
         else
         {
             while (current.node != startNode.node)

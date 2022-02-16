@@ -17,7 +17,6 @@ Node* PathFindingList::FindSmallestValue()
 		{
 			oldNode = node;
 		}
-		
 	}
 	return &oldNode;
 }
