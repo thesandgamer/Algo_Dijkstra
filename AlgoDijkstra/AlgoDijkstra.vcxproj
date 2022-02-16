@@ -140,9 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AlgoDijkstra.cpp" />
+    <ClCompile Include="Connection.cpp" />
     <ClCompile Include="PathFindingList.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Connection.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="PathFindingList.h" />
   </ItemGroup>

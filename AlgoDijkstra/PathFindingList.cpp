@@ -10,7 +10,16 @@ PathFindingList::~PathFindingList()
 
 Node* PathFindingList::FindSmallestValue()
 {
-	return nullptr;
+	Node oldNode;
+	for (Node node : nodeList)
+	{
+		if (oldNode.cost <= node.cost)
+		{
+			oldNode = node;
+		}
+		
+	}
+	return &oldNode;
 }
 
 bool PathFindingList::Contains(Node node)
