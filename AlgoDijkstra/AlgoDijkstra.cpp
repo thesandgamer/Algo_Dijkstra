@@ -2,14 +2,32 @@
 //
 
 #include <iostream>
-#include <vector>
+#include "Node.h"
+#include "PathFindingList.h"
 
-using std::vector;
+
+
+
+
 
 int main()
 {
-    PathfindingList openList;
-    PathfindingList closedList;
+    float noCO = 100000.0f;
+    float graph[7][7] =
+    {
+        //A     B       C       D       E       F       G
+        {noCO,  noCO,   noCO,   noCO,   noCO,   noCO,   noCO}, //A
+        {noCO,  noCO,   noCO,   noCO,   noCO,   noCO,   noCO}, //B
+        {noCO,  noCO,   noCO,   noCO,   noCO,   noCO,   noCO}, //C
+        {noCO,  noCO,   noCO,   noCO,   noCO,   noCO,   noCO}, //D
+        {noCO,  noCO,   noCO,   noCO,   noCO,   noCO,   noCO}, //E
+        {noCO,  noCO,   noCO,   noCO,   noCO,   noCO,   noCO}, //F
+        {noCO,  noCO,   noCO,   noCO,   noCO,   noCO,   noCO}, //G
+
+    };
+
+    PathFindingList openList = PathFindingList();
+    PathFindingList closedList = PathFindingList();
 
     Node startNode = Node();
     startNode.node = 'A';
@@ -19,7 +37,6 @@ int main()
     Node goalNode = Node();
 
 
-    openList = PathfindingList();
     openList.nodeList.push_back( startNode);
 
     while (openList.nodeList.size() > 0)
@@ -31,11 +48,52 @@ int main()
         
         for (Node* connection : current.connectedNodes)
         {
-            
+            Node endNode = *connection;
+            Node* endNodeRecord;
+            int endNodeCost = current.cost + connection->cost;
+
+            if (closedList.Contains(endNode))
+            {
+                continue;
+            }
+            else if (openList.Contains(endNode))
+            {                             
+                endNodeRecord = new Node();
+                endNodeRecord = openList.Find(endNode);
+                if (endNodeRecord->cost <= endNodeCost) continue;
+            }
+            else
+            {
+                endNodeRecord = new Node();
+                endNodeRecord->node = endNode.node;
+                
+            }
+            endNodeRecord->cost = endNodeCost;
+            endNodeRecord->connectedNodes.push_back(connection);
+
+            if (!openList.Contains(endNode))
+            {
+                openList.nodeList.push_back(*endNodeRecord);
+            }
+
+            //REMOVE LE current de open
+            closedList.nodeList.push_back(current);
 
         }
 
+
+        //Créer le path
+        if (current.node != goalNode.node)
+        {
+
+        }
+
+
+
+
     }
+
+
 
 }
 
@@ -47,26 +105,4 @@ int main()
 //
 // Find: operator qui va comparer deux nodes avec leurs paralètres
 
-
-struct Node
-{
-    char node;
-    vector<Node*> connectedNodes;
-    int cost;
-
-};
-
-class PathfindingList
-{
-public:
-    vector<Node> nodeList;
-
-    Node* FindSmallestValue();
-    bool Contains();
-    Node* Find();
-
-
-    //Créer un override pour = et == qui va retourner la nodeList
-    //Créer un override pour += et pour -=
-};
 
