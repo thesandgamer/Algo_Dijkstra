@@ -71,18 +71,28 @@ vector<float> FindPath()
         if (current.node == goalNode.node) break;
 
 
-        //Choper la valeur du tableau du node current
+        //Choper la valeur de taille du Graph
         int rows = sizeof(graph) / sizeof(graph[0]);
         int cols = sizeof(graph[0]) / sizeof(graph[0][0]);
 
         connections.resize(rows * cols);
 
-        //On va set les connections du node record
+        //On va set les connections du node record current
+
+
+
         for (int x = 0; x < rows; x++)
         {
-            for (int x = 0; x < cols; x++)
+            for (int y = 0; y < cols; y++)
             {
-
+                if (graph[x][y] != noCO || graph[x][y] != 0)
+                {
+                    /*
+                     Node* node = new Node();
+                     Connection connect = Connection(graph[x][y], node, node);
+                     connections.push_back(connect);
+                    */
+                }
             }
         }
         
