@@ -38,6 +38,8 @@ vector<float> FindPath()
         {noCO,  noCO,   noCO,   noCO,   25.0,   10.0,   noCO}, //G
 
     };
+    char letterTab[7] = { 'A','B','C','D','E','F','G' };
+
     //[=========================================================================]
 
     //Créer les listes des node ouvert et fermé
@@ -86,12 +88,10 @@ vector<float> FindPath()
             for (int y = 0; y < cols; y++)
             {
                 if (graph[x][y] != noCO || graph[x][y] != 0)
-                {
-                    /*
-                     Node* node = new Node();
-                     Connection connect = Connection(graph[x][y], node, node);
-                     connections.push_back(connect);
-                    */
+                {               
+                    Node* node = new Node();
+                    Connection connect = Connection(graph[x][y], x, y);       
+                    connections.push_back(connect);               
                 }
             }
         }
@@ -102,8 +102,12 @@ vector<float> FindPath()
             //On va faire des test avec le node connecté
             Node* endNodeRecord;
 
-            Node endNode = *connection.GetFromNode(); //Stoque le node auquel il est relié
+
+            int endNodePos = connection.GetFromNode();
+            Node endNode = Node(); //Stoque le node auquel il est relié
+            endNode.cost = endNodePos;
             int endNodeCost = current.cost + connection.GetCost(); //Stoquer le cout du node auquel le actuel est va
+            std::cout << "Connections: " << letterTab[endNodePos] << " cost:" << endNodeCost;
 
             //Si il fait parti des nodes fermé on passe à la connection uivante
             if (closedList.Contains(endNode))
