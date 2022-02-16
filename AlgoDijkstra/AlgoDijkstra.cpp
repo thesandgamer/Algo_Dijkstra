@@ -33,7 +33,7 @@ vector<float> FindPath()
         {15.0,  noCO,   noCO,   20.0,   18.0,   noCO,   noCO}, //B
         {22.0,  noCO,   noCO,   16.0,   noCO,   42.0,   noCO}, //C
         {noCO,  20.0,   16.0,   noCO,   noCO,   noCO,   noCO}, //D
-        {noCO,  noCO,   noCO,   noCO,   noCO,   15.0,   25.0}, //E
+        {noCO,  18.0,   noCO,   noCO,   noCO,   15.0,   25.0}, //E
         {noCO,  noCO,   42.0,   noCO,   15.0,   noCO,   10.0}, //F
         {noCO,  noCO,   noCO,   noCO,   25.0,   10.0,   noCO}, //G
 
@@ -140,8 +140,10 @@ vector<float> FindPath()
         //Si à la fin le node current n'est pas le goal c'est qu'on ne l'a pas trouvé
         if (current.node != goalNode.node)
         {
+
         }
 
+        
         //Calcul du chemin final
         else
         {
