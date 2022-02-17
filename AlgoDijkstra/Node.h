@@ -6,7 +6,8 @@ using std::vector;
 
 struct Node
 {
-    char node;
+    //char node;
+    int node;
     vector<Connection> connectedNodes;
     int cost;
 
