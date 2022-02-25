@@ -33,7 +33,7 @@ struct Node
     {
         node = ref.node;
         connectedNodes = ref.connectedNodes;
-        cost = ref.node;
+        cost = ref.cost;
         return *this;
     };
 

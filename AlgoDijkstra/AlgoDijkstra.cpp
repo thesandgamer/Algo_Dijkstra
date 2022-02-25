@@ -32,12 +32,12 @@ vector<float> FindPath()
     {
         //A     B       C       D       E       F       G
         {0.0f,  15.0,   22.0,   noCO,   noCO,   noCO,   noCO}, //A
-        {15.0,  noCO,   noCO,   20.0,   18.0,   noCO,   noCO}, //B
-        {22.0,  noCO,   noCO,   16.0,   noCO,   42.0,   noCO}, //C
-        {noCO,  20.0,   16.0,   noCO,   noCO,   noCO,   noCO}, //D
-        {noCO,  18.0,   noCO,   noCO,   noCO,   15.0,   25.0}, //E
-        {noCO,  noCO,   42.0,   noCO,   15.0,   noCO,   10.0}, //F
-        {noCO,  noCO,   noCO,   noCO,   25.0,   10.0,   noCO}, //G
+        {15.0,  0.0f,   noCO,   20.0,   18.0,   noCO,   noCO}, //B
+        {22.0,  noCO,   0.0f,   16.0,   noCO,   42.0,   noCO}, //C
+        {noCO,  20.0,   16.0,   0.0f,   noCO,   noCO,   noCO}, //D
+        {noCO,  18.0,   5.0f,   noCO,   0.0f,   15.0,   25.0}, //E
+        {noCO,  noCO,   42.0,   noCO,   15.0,   0.0f,   10.0}, //F
+        {noCO,  noCO,   noCO,   noCO,   25.0,   10.0,   0.0f}, //G
 
     };
     char letterTab[7] = { 'A','B','C','D','E','F','G' };
@@ -49,116 +49,119 @@ vector<float> FindPath()
     PathFindingList closedList = PathFindingList(); //Node plus calculable car on à tout calculé
 
     //
-    vector<Connection> connections;
 
     //Créer le record du node de départ
     Node startNode = Node();
     startNode.node = 0;
-    startNode.connectedNodes = {};
+    startNode.connectedNodes.push_back( Connection(graph[0][0], 0, 0) );
     startNode.cost = 0;
 
     Node goalNode = Node();
-    goalNode.node = 'F';
+    //goalNode.node = 'f';
+    goalNode.node = 5;
     goalNode.connectedNodes = {};
     goalNode.cost = 0;
 
     //Ajoute à la liste des nodes à lire le node de départ
     openList.nodeList.push_back(startNode);
 
+    Node current =  Node();
+
     //tant qu'il y a des nodes à essayer les connections
     while (openList.nodeList.size() > 0)
     {
+
         //Le node actuel est le node record de la la liste avec le plus petit côut
-        Node current = *openList.FindSmallestValue();
+        current = *openList.FindSmallestValue();
 
         //Si le plus petit calcul(node record) est celui de fin on arrète
         if (current.node == goalNode.node) break;
 
 
+        //------------Connections---------------
         //Choper la valeur de taille du Graph
         int rows = sizeof(graph) / sizeof(graph[0]);
         int cols = sizeof(graph[0]) / sizeof(graph[0][0]);
 
-        connections.resize(rows * cols);
-
-        //On va set les connections du node record current
-
-
-        /*
-        for (int x = 0; x < rows; x++)
-        {
-            for (int y = 0; y < cols; y++)
-            {
-                if ( (graph[x][y] != noCO ) and ( graph[x][y] != 0) )
-                {               
-                    Connection connect = Connection(graph[x][y], x, y);       
-                    connections.push_back(connect);        
-                    char nodeStart = letterTab[connect.GetFromNode()];
-                    char nodeEnd = letterTab[connect.GetToNode()];
-                    std::cout << "From node: " << nodeStart << " to node: " << nodeEnd << " cost: " << connect.GetCost() << std::endl;
-                }
-            }
-        }*/
-        //current.connectedNodes()
         //Cheche le node actuel, et regarde quels sont ces connections
         //Lire chaque Ligne ou colonne
         //Si y'a un connection(pas de 0 ou de noCo on rajoute)
+        
         int cnode = current.node;
+        vector<Connection> currentConnections; 
         for (int i = 0; i < rows; i++)
         {
-            if ((graph[cnode][i] != noCO) and (graph[cnode][i] != 0))
+            if ((graph[cnode][i] != noCO) and (graph[cnode][i] != 0.0f))
             {
-                Connection connect = Connection(graph[cnode][i], 0, i);
-                connections.push_back(connect);
-                char nodeStart = letterTab[connect.GetFromNode()];
-                char nodeEnd = letterTab[connect.GetToNode()];
-                std::cout << "From node: " << nodeStart << " to node: " << nodeEnd << " cost: " << connect.GetCost() << std::endl;
+                Connection connect = Connection(graph[cnode][i], cnode, i);
+                currentConnections.push_back(connect);
+               // current.connectedNodes.push_back(connect);
             }
         }
+        //-------------------------------
         
         //Pour chaque connection du node actuel
-        for (Connection connection : current.connectedNodes)
+        for (Connection connection : currentConnections)
         {
             //On va faire des test avec le node connecté
-            Node* endNodeRecord;
+            Node nextNodeRecord;
+            Node nextNode = Node(); //Stoque le node auquel il est relié
+
+            //Set le node suivant
+            int nextNodeValue = connection.GetToNode();
+            int nextNodeCost = current.cost + connection.GetCost(); //Stoquer le cout du node auquel le actuel est va
+            nextNode.node = nextNodeValue;
+            nextNode.cost = nextNodeCost;
 
 
-            int endNodePos = connection.GetFromNode();
-            Node endNode = Node(); //Stoque le node auquel il est relié
-            endNode.cost = endNodePos;
-            int endNodeCost = current.cost + connection.GetCost(); //Stoquer le cout du node auquel le actuel est va
-            std::cout << "Connections: " << letterTab[endNodePos] << " cost:" << endNodeCost<<std::endl;
+            //Print la connection
+            char nodeStart = letterTab[connection.GetFromNode()];
+            char nodeEnd = letterTab[connection.GetToNode()];
+            //std::cout << "From node: " << nodeStart << " to node: " << nodeEnd << " cost: " << connection.GetCost() << std::endl;
+            //std::cout << "From node: " << connection.GetFromNode() << " to node: " << connection.GetToNode() << " cost: " << connection.GetCost() << std::endl;
+
+            if (nextNodeValue == 5)
+            {
+                bool k = false;
+            }
+
 
             //Si il fait parti des nodes fermé on passe à la connection uivante
-            if (closedList.Contains(endNode))
+            if (closedList.Contains(nextNode))
             {
                 continue;
             }
             //Si il fait parti de la liste ouverte
-            else if (openList.Contains(endNode))
+            else if (openList.Contains(nextNode))
             {
-                endNodeRecord = openList.Find(endNode);
-                if (endNodeRecord->cost <= endNodeCost) continue; //Si son coût 
+                nextNodeRecord = *openList.Find(nextNode);
+               
+                if (nextNodeRecord.cost <= nextNodeCost)
+                {
+                    continue; //Si son coût 
+                }
             }
             //Sinon on va créer un record/un node 
             else
             {
-                endNodeRecord = new Node();
-                endNodeRecord->node = endNode.node;
+                nextNodeRecord = Node();
+                nextNodeRecord.node = nextNode.node;
 
             }
 
-            endNodeRecord->cost = endNodeCost;
-            endNodeRecord->connectedNodes.push_back(connection);
+            nextNodeRecord.cost = nextNodeCost;
+            nextNodeRecord.connectedNodes.push_back(connection);
 
             //Si il ne fait pas parti de la liste des nodes visité, on l'ajoute
-            if (!openList.Contains(endNode))
+            if (!openList.Contains(nextNode))
             {
-                openList.nodeList.push_back(*endNodeRecord);
+                openList.nodeList.push_back(nextNodeRecord);
             }
 
 
         }
+        std::cout << "NODE " << current.node << " COST " << current.cost<< " from node: " << current.connectedNodes[0].GetFromNode() << std::endl;
+
 
         //Quand on à finit de check toutes les connections du node
         //On enlève current de open
@@ -169,30 +172,51 @@ vector<float> FindPath()
 
 
 
-        //Créer le path
-        vector<Connection> path;
-
-        //Si à la fin le node current n'est pas le goal c'est qu'on ne l'a pas trouvé
-        if (current.node != goalNode.node)
-        {
-
-        }
-
-        
-        //Calcul du chemin final
-        else
-        {
-            while (current.node != startNode.node)
-            {
-               // path.push_back(current.connectedNodes);
-               // current = current.connectedNodes.get
-            }
-        }
-
 
 
 
     }
+
+    //std::cout << "NODE " << openList.nodeList[0].node << " COST " << openList.nodeList[0].cost << " from node: " << current.connectedNodes[0].GetFromNode() << std::endl;
+    std::cout << "NODE " << current.node << " COST " << current.cost << " from node: " << current.connectedNodes[0].GetFromNode() << std::endl;
+    
+
+    //Créer le path
+     vector<int> path = {};
+
+    //Si à la fin le node current n'est pas le goal c'est qu'on ne l'a pas trouvé
+    if (current.node != goalNode.node)
+    {
+        //path = {};
+        std::cout << std::endl << "Chemin non trouvé"<< std::endl;
+
+    }
+    //Calcul du chemin final
+    else
+    {
+        while (current.node != startNode.node)//Tant que le node actuel n'est pas le premier
+        {
+            path.push_back(current.node);
+            current = *closedList.Find( current.connectedNodes[0].GetFromNode());
+            //passe au node précédant
+           // current.node = current.connectedNodes[0].GetFromNode();
+           // current = closedList.Find(current.connectedNodes[0].GetFromNode());
+           // std::cout << "Node " << current.node << std::endl;
+        }
+    }
+
+
+    path.push_back(startNode.node);
+    std::cout << std::endl;
+    std::cout << "Start node: " << startNode.node << " => " << "End node: " << goalNode.node << std::endl;;
+
+    std::cout << "Path: ";
+    for (int let : path)
+    {
+        std::cout << let<<" ";
+
+    }
+    std::cout << std::endl;
 
     return {};
 }

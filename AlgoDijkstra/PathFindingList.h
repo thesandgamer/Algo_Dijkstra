@@ -13,6 +13,7 @@ public:
     Node* FindSmallestValue();
     bool Contains(Node node);
     Node* Find(Node node);
+    Node* Find(int node);
 
 
     //Créer un override pour = et == qui va retourner la nodeList
