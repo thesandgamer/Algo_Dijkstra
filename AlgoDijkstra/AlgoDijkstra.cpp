@@ -95,7 +95,6 @@ vector<float> FindPath()
             {
                 Connection connect = Connection(graph[cnode][i], cnode, i);
                 currentConnections.push_back(connect);
-               // current.connectedNodes.push_back(connect);
             }
         }
         //-------------------------------
@@ -150,6 +149,7 @@ vector<float> FindPath()
             }
 
             nextNodeRecord->cost = nextNodeCost;
+            nextNodeRecord->connectedNodes.clear();
             nextNodeRecord->connectedNodes.push_back(connection);
 
             //Si il ne fait pas parti de la liste des nodes visité, on l'ajoute
@@ -160,9 +160,10 @@ vector<float> FindPath()
 
 
         }
-        std::cout << "NODE " << current.node << " COST " << current.cost<< " from node: " << current.connectedNodes[0].GetFromNode() << std::endl;
+        //std::cout << "NODE " << current.node << " COST " << current.cost<< " from node: " << current.connectedNodes[0].GetFromNode() << std::endl;
+        std::cout << "NODE " << letterTab[current.node] << " COST " << current.cost<< " from node: " << letterTab[current.connectedNodes[0].GetFromNode()] << std::endl;
 
-
+        
         //Quand on à finit de check toutes les connections du node
         //On enlève current de open
         std::vector<Node>::iterator it = std::find(openList.nodeList.begin(), openList.nodeList.end(), current);
@@ -176,20 +177,20 @@ vector<float> FindPath()
 
 
     }
-
-    //std::cout << "NODE " << openList.nodeList[0].node << " COST " << openList.nodeList[0].cost << " from node: " << current.connectedNodes[0].GetFromNode() << std::endl;
-    std::cout << "NODE " << current.node << " COST " << current.cost << " from node: " << current.connectedNodes[0].GetFromNode() << std::endl;
+    //std::cout << "NODE " << current.node << " COST " << current.cost << " from node: " << current.connectedNodes[0].GetFromNode() << std::endl;
+    std::cout << "NODE " << letterTab[current.node] << " COST " << current.cost << " from node: " << letterTab[current.connectedNodes[0].GetFromNode()] << std::endl;
     
 
     //Créer le path
      vector<int> path = {};
-
+     int finalCost = current.cost;
+     //---------
+     std::cout << std::endl;
+     std::cout << "Start node: " << letterTab[startNode.node] << " => " << "End node: " << letterTab[goalNode.node] << std::endl;;
     //Si à la fin le node current n'est pas le goal c'est qu'on ne l'a pas trouvé
     if (current.node != goalNode.node)
     {
-        //path = {};
-        std::cout << std::endl << "Chemin non trouvé"<< std::endl;
-
+        std::cout << std::endl << "Path not found"<< std::endl;
     }
     //Calcul du chemin final
     else
@@ -198,34 +199,28 @@ vector<float> FindPath()
         {
             path.push_back(current.node);
             current = *closedList.Find( current.connectedNodes[0].GetFromNode());
-            //passe au node précédant
-           // current.node = current.connectedNodes[0].GetFromNode();
-           // current = closedList.Find(current.connectedNodes[0].GetFromNode());
-           // std::cout << "Node " << current.node << std::endl;
         }
+        path.push_back(startNode.node);
+
+        std::reverse(path.begin(), path.end());
+
+        std::cout << "Path: ";
+        for (int let : path)
+        {
+            std::cout << letterTab[let] << " ";
+
+        }
+        std::cout << std::endl;
+
+        std::cout << "For a cost of: " << finalCost << std::endl;
+
     }
 
 
-    path.push_back(startNode.node);
-    std::cout << std::endl;
-    std::cout << "Start node: " << startNode.node << " => " << "End node: " << goalNode.node << std::endl;;
 
-    std::cout << "Path: ";
-    for (int let : path)
-    {
-        std::cout << let<<" ";
-
-    }
-    std::cout << std::endl;
 
     return {};
 }
 
-
-//
-// Trouve dans la liste le node avec le nom qu'on veut et on le set en node de départ
-// 
-//
-// Find: operator qui va comparer deux nodes avec leurs paralètres
 
 
