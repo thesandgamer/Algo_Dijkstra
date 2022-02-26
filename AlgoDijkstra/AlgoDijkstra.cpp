@@ -104,7 +104,7 @@ vector<float> FindPath()
         for (Connection connection : currentConnections)
         {
             //On va faire des test avec le node connecté
-            Node nextNodeRecord;
+            Node* nextNodeRecord;
             Node nextNode = Node(); //Stoque le node auquel il est relié
 
             //Set le node suivant
@@ -134,9 +134,9 @@ vector<float> FindPath()
             //Si il fait parti de la liste ouverte
             else if (openList.Contains(nextNode))
             {
-                nextNodeRecord = *openList.Find(nextNode);
+                nextNodeRecord = openList.Find(nextNode);
                
-                if (nextNodeRecord.cost <= nextNodeCost)
+                if (nextNodeRecord->cost <= nextNodeCost)
                 {
                     continue; //Si son coût 
                 }
@@ -144,18 +144,18 @@ vector<float> FindPath()
             //Sinon on va créer un record/un node 
             else
             {
-                nextNodeRecord = Node();
-                nextNodeRecord.node = nextNode.node;
+                nextNodeRecord = new Node();
+                nextNodeRecord->node = nextNode.node;
 
             }
 
-            nextNodeRecord.cost = nextNodeCost;
-            nextNodeRecord.connectedNodes.push_back(connection);
+            nextNodeRecord->cost = nextNodeCost;
+            nextNodeRecord->connectedNodes.push_back(connection);
 
             //Si il ne fait pas parti de la liste des nodes visité, on l'ajoute
             if (!openList.Contains(nextNode))
             {
-                openList.nodeList.push_back(nextNodeRecord);
+                openList.nodeList.push_back(*nextNodeRecord);
             }
 
 

@@ -19,9 +19,10 @@ public:
     //Créer un override pour = et == qui va retourner la nodeList
     //Créer un override pour += et pour -=
 
+    /*
     bool operator == (PathFindingList const& obj)
     {
-        /*
+        
         if (this->nodeList == obj.nodeList)
         {
             return true;
@@ -31,8 +32,8 @@ public:
         {
             return false;
         }
-       */
-    }
+       
+    }*/
 
     PathFindingList& operator= (const PathFindingList& ref)
     {
