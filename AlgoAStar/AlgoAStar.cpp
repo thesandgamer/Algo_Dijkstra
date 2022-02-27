@@ -48,16 +48,18 @@ vector<float> FindPath()
     PathFindingList openList = PathFindingList(); //Nodes visités
     PathFindingList closedList = PathFindingList(); //Node plus calculable car on à tout calculé
 
-    //
 
     //Créer le record du node de départ
     Node startNode = Node();
     startNode.node = 0;
     startNode.connectedNodes.push_back( Connection(graph[0][0], 0, 0) );
     startNode.cost = 0;
+    ////estimedcost = heurisitque.estimate(startnode)
 
+
+    //
     Node goalNode = Node();
-    goalNode.node = 5;
+    goalNode.node = 4;
     goalNode.connectedNodes = {};
     goalNode.cost = 0;
 
@@ -71,7 +73,7 @@ vector<float> FindPath()
     {
 
         //Le node actuel est le node record de la la liste avec le plus petit côut
-        current = *openList.FindSmallestValue();
+        current = *openList.FindSmallestValue(); ////utiliser le total cost pour le find smallest value
 
         //Si le plus petit calcul(node record) est celui de fin on arrète
         if (current.node == goalNode.node) break;
@@ -127,6 +129,12 @@ vector<float> FindPath()
             //Si il fait parti des nodes fermé on passe à la connection uivante
             if (closedList.Contains(nextNode))
             {
+                //nextNodeRecord = close.find(nextNode)
+                //if (nextNodeRecord.cost <= endNodeCost) continue
+                //closed -= nextNodeRecord
+
+                //endNodeHeurisitic = endNodeRecord.estimedTotalCost - endNideRecost.cost
+
                 continue;
             }
             //Si il fait parti de la liste ouverte
@@ -138,6 +146,8 @@ vector<float> FindPath()
                 {
                     continue; //Si son coût 
                 }
+
+                //nextNodeHeuristic = nextNodeRecord.estimedTotalCost - nextNodeRecord.cost
             }
             //Sinon on va créer un record/un node 
             else
@@ -145,11 +155,14 @@ vector<float> FindPath()
                 nextNodeRecord = new Node();
                 nextNodeRecord->node = nextNode.node;
 
+                //nextNodeHeuristic = heuristique.estimate(nextNode)
+
             }
 
             nextNodeRecord->cost = nextNodeCost;
             nextNodeRecord->connectedNodes.clear();
             nextNodeRecord->connectedNodes.push_back(connection);
+            //nextnoderecord.estimated total cost = nextNodeCost + nextNodeHeuristique
 
             //Si il ne fait pas parti de la liste des nodes visité, on l'ajoute
             if (!openList.Contains(nextNode))
