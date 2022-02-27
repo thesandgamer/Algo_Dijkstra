@@ -27,6 +27,20 @@ struct Node
             return false;
         }
         
+    }    
+    bool operator == (Node* const& obj)
+    {
+        
+        if (this->node == obj->node)
+        {
+            return true;
+
+        }
+        else
+        {
+            return false;
+        }
+        
     }
 
 
@@ -37,6 +51,7 @@ struct Node
         node = ref.node;
         connectedNodes = ref.connectedNodes;
         cost = ref.cost;
+        estimedTotalCost = ref.estimedTotalCost;    
         return *this;
     };
 

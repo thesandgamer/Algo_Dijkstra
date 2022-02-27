@@ -41,6 +41,10 @@ public:
         return *this;
     };
 
+    PathFindingList operator-=(Node const& obj)
+    {
+        PathFindingList result;
+    }
 
     /*
     PathFindingList operator+=(PathFindingList const& obj)

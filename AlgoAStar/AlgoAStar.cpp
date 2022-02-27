@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Node.h"
 #include "PathFindingList.h"
+#include "Heuristic.h"
 
 #include <string>
 
@@ -48,25 +49,32 @@ vector<float> FindPath()
     PathFindingList openList = PathFindingList(); //Nodes visités
     PathFindingList closedList = PathFindingList(); //Node plus calculable car on à tout calculé
 
+    //
+    Node goalNode = Node();
+    goalNode.node = 5;
+    goalNode.connectedNodes = {};
+    goalNode.cost = 0;
+
+    //
+    Heuristic heuristique = Heuristic(goalNode.node);
+
 
     //Créer le record du node de départ
     Node startNode = Node();
     startNode.node = 0;
     startNode.connectedNodes.push_back( Connection(graph[0][0], 0, 0) );
     startNode.cost = 0;
-    ////estimedcost = heurisitque.estimate(startnode)
+    startNode.estimedTotalCost = heuristique.Estimate(startNode);
 
 
-    //
-    Node goalNode = Node();
-    goalNode.node = 4;
-    goalNode.connectedNodes = {};
-    goalNode.cost = 0;
+
 
     //Ajoute à la liste des nodes à lire le node de départ
     openList.nodeList.push_back(startNode);
 
     Node current =  Node();
+
+
 
     //tant qu'il y a des nodes à essayer les connections
     while (openList.nodeList.size() > 0)
@@ -110,6 +118,8 @@ vector<float> FindPath()
             //Set le node suivant
             int nextNodeValue = connection.GetToNode();
             int nextNodeCost = current.cost + connection.GetCost(); //Stoquer le cout du node auquel le actuel est va
+            int nextNodeHeuristic;
+
             nextNode.node = nextNodeValue;
             nextNode.cost = nextNodeCost;
 
@@ -129,11 +139,12 @@ vector<float> FindPath()
             //Si il fait parti des nodes fermé on passe à la connection uivante
             if (closedList.Contains(nextNode))
             {
-                //nextNodeRecord = close.find(nextNode)
-                //if (nextNodeRecord.cost <= endNodeCost) continue
-                //closed -= nextNodeRecord
+                nextNodeRecord = closedList.Find(nextNode);
+                if (nextNodeRecord->cost <= nextNodeCost) continue;
+                std::vector<Node>::iterator it = std::find(closedList.nodeList.begin(), closedList.nodeList.end(), nextNodeRecord);
+                closedList.nodeList.erase(it);
 
-                //endNodeHeurisitic = endNodeRecord.estimedTotalCost - endNideRecost.cost
+                nextNodeHeuristic = nextNodeRecord->estimedTotalCost - nextNodeRecord->cost;
 
                 continue;
             }
@@ -147,7 +158,7 @@ vector<float> FindPath()
                     continue; //Si son coût 
                 }
 
-                //nextNodeHeuristic = nextNodeRecord.estimedTotalCost - nextNodeRecord.cost
+                nextNodeHeuristic = nextNodeRecord->estimedTotalCost - nextNodeRecord->cost;
             }
             //Sinon on va créer un record/un node 
             else
@@ -155,14 +166,14 @@ vector<float> FindPath()
                 nextNodeRecord = new Node();
                 nextNodeRecord->node = nextNode.node;
 
-                //nextNodeHeuristic = heuristique.estimate(nextNode)
+                nextNodeHeuristic = heuristique.Estimate(nextNode);
 
             }
 
             nextNodeRecord->cost = nextNodeCost;
             nextNodeRecord->connectedNodes.clear();
             nextNodeRecord->connectedNodes.push_back(connection);
-            //nextnoderecord.estimated total cost = nextNodeCost + nextNodeHeuristique
+            nextNodeRecord->estimedTotalCost = nextNodeCost + nextNodeHeuristic;
 
             //Si il ne fait pas parti de la liste des nodes visité, on l'ajoute
             if (!openList.Contains(nextNode))
@@ -173,7 +184,7 @@ vector<float> FindPath()
 
         }
         //std::cout << "NODE " << current.node << " COST " << current.cost<< " from node: " << current.connectedNodes[0].GetFromNode() << std::endl;
-        std::cout << "NODE " << letterTab[current.node] << " COST " << current.cost<< " from node: " << letterTab[current.connectedNodes[0].GetFromNode()] << std::endl;
+        std::cout << "NODE " << letterTab[current.node] << " COST " << current.cost<< " Heurstique cost: "<< current.estimedTotalCost << " from node: " << letterTab[current.connectedNodes[0].GetFromNode()] << std::endl;
 
         
         //Quand on à finit de check toutes les connections du node
